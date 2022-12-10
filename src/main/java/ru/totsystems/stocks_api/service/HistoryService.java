@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.totsystems.stocks_api.convert.XMLConverter;
 import ru.totsystems.stocks_api.dto.HistoryDto;
+import ru.totsystems.stocks_api.exception.NotFoundException;
 import ru.totsystems.stocks_api.mapper.HistoryMapper;
 import ru.totsystems.stocks_api.model.History;
 import ru.totsystems.stocks_api.model.Security;
@@ -23,7 +24,8 @@ public class HistoryService {
     @Transactional
     public History addHistory(MultipartFile file, Long secId) {
         History history = XMLConverter.convertXMLtoObject(file, History.class);
-        Security security = securityRepository.findBySecId(secId).orElseThrow(RuntimeException::new);
+        Security security = securityRepository.findBySecId(secId)
+                .orElseThrow(() -> new NotFoundException("Security not found"));
         security.setHistory(history);
         securityRepository.save(security);
         return history;
@@ -31,7 +33,7 @@ public class HistoryService {
 
     @Transactional(readOnly = true)
     public History getHistoryById(Long secId) {
-        return historyRepository.findById(secId).orElseThrow(RuntimeException::new);
+        return historyRepository.findById(secId).orElseThrow(() -> new NotFoundException("History not found"));
     }
 
     public History updateHistory(HistoryDto historyDto) {

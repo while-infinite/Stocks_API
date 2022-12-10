@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.totsystems.stocks_api.convert.XMLConverter;
 import ru.totsystems.stocks_api.dto.FilesDto;
 import ru.totsystems.stocks_api.dto.SecurityDto;
+import ru.totsystems.stocks_api.exception.NotFoundException;
 import ru.totsystems.stocks_api.mapper.SecurityMapper;
 import ru.totsystems.stocks_api.model.History;
 import ru.totsystems.stocks_api.model.Security;
@@ -41,7 +42,7 @@ public class SecurityService {
 
     @Transactional(readOnly = true)
     public Security getSecurity(Long id) {
-        return securityRepository.findById(id).orElseThrow(RuntimeException::new);
+        return securityRepository.findById(id).orElseThrow(() -> new NotFoundException("Security not found"));
     }
 
     @Transactional
@@ -49,10 +50,6 @@ public class SecurityService {
         Security security = mapper.securityDtoToSecurity(securityDto);
         History history = historyService.getHistoryById(securityDto.getSecId());
         security.setHistory(history);
-        return securityRepository.save(security);
-    }
-
-    public Security save(Security security) {
         return securityRepository.save(security);
     }
 
