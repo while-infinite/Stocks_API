@@ -8,36 +8,39 @@ import ru.totsystems.stocks_api.convert.XMLConverter;
 import ru.totsystems.stocks_api.dto.HistoryDto;
 import ru.totsystems.stocks_api.mapper.HistoryMapper;
 import ru.totsystems.stocks_api.model.History;
+import ru.totsystems.stocks_api.model.Security;
 import ru.totsystems.stocks_api.repository.HistoryRepository;
-
-import java.time.LocalDate;
-import java.util.Optional;
+import ru.totsystems.stocks_api.repository.SecurityRepository;
 
 @Service
 @RequiredArgsConstructor
 public class HistoryService {
     private final HistoryRepository historyRepository;
     private final HistoryMapper mapper;
+    private final SecurityRepository securityRepository;
 
 
-    public History addHistory(MultipartFile file, Long secId){
-        History history = XMLConverter.convertXMLtoObject(file);
-        return null;
+    @Transactional
+    public History addHistory(MultipartFile file, Long secId) {
+        History history = XMLConverter.convertXMLtoObject(file, History.class);
+        Security security = securityRepository.findBySecId(secId).orElseThrow(RuntimeException::new);
+        security.setHistory(history);
+        securityRepository.save(security);
+        return history;
     }
-
 
     @Transactional(readOnly = true)
-    public History getHistoryByTradedate(LocalDate date){
-        return historyRepository.findHistoryByTradedate(date).orElseThrow(RuntimeException::new);
+    public History getHistoryById(Long secId) {
+        return historyRepository.findById(secId).orElseThrow(RuntimeException::new);
     }
 
-    public History updateHistory(HistoryDto historyDto){
+    public History updateHistory(HistoryDto historyDto) {
         History history = mapper.historyDtoToHistory(historyDto);
         return historyRepository.save(history);
     }
 
-    public void deleteHistory(Long secid){
-        historyRepository.deleteById(secid);
+    public void deleteHistory(Long secId) {
+        historyRepository.deleteById(secId);
     }
 
 }

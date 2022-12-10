@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot & Thymeleaf File Upload</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <a th:href="@{/security/uploadForm}" type="button" class="btn btn-primary">Add Security with History</a>
+    <div class="row">
+        <h2>List security</h2>
+        <hr/>
+        <table class="table border=2 table-stripe" id="employee-table">
+            <thead>
+            <tr>
+                <th>Secid</th>
+                <th>Regnumber</th>
+                <th>Name</th>
+                <th>Emitent_title</th>
+                <th>Tradedate</th>
+                <th>Numtrades</th>
+                <th>Open</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="responseDto: ${responseDtoList}">
+                <td th:text="${responseDto.secId}"/>
+                <td th:text="${responseDto.regNumber}"/>
+                <td th:text="${responseDto.name}"/>
+                <td th:text="${responseDto.emitentTitle}"/>
+                <td th:text="${responseDto.tradeDate}"/>
+                <td th:text="${responseDto.numTrades}"/>
+                <td th:text="${responseDto.open}"/>
+                <td>
+                    <form th:action="@{/security/updateForm(securityId=${responseDto.id})}" th:method="put">
+                        <input type="submit" value="Update Security" class="btn btn-info"/>
+                    </form>
+                    <form th:action="@{/history/updateForm(secId=${responseDto.secId})}" th:method="put">
+                        <input type="submit" value="Add/Update History" class="btn btn-info"/>
+                    </form>
+                </td>
+                <td>
+                    <form th:action="@{/security/deleteSecurity(securityId=${responseDto.id})}" th:method="delete">
+                        <input type="submit" value="Delete Security" class="btn btn-info"/>
+                    </form>
+                    <form th:action="@{/history/updateForm(secId=${responseDto.secId})}" th:method="delete">
+                        <input type="submit" value="Delete History" class="btn btn-danger"/>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<hr/>
+<div class="col border-end  d-flex justify-content-center align-items-center">
+    <button type="button" th:href="@{/security}" class="btn btn-primary float-center">Back to main page</button>
+</div>
+</body>
+</html>

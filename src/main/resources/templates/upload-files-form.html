@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spring Boot & Thymeleaf File Upload</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <h2>Upload file for update</h2>
+            <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
+            <form method="post" th:action="@{/security/upload}" enctype="multipart/form-data" >
+                <div class="form-group">
+                    <label for="securityFile">Security file</label>
+                    <input type="file" name="collage" multiple="multiple" id="securityFile" class="form-control-file"/>
+                    <label for="historyFile">History file</label>
+                    <input type="file" name="collage" multiple="multiple" id="historyFile" class="form-control-file"/>
+<!--                    <label for="securityFile">Security file</label>-->
+<!--                    <input type="file" th:field="*{securityFile}" class="form-control-file" id="securityFile">-->
+<!--                    <label for="historyFile">History file</label>-->
+<!--                    <input type="file" th:field="*{historyFile}" class="form-control-file" id="historyFile">-->
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Files</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -20,8 +20,16 @@ public class History {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlElement(name = "secid")
+    @Column(name = "secid")
     private Long secId;
-    private LocalDate tradedate;
-    private int numtrades;
+
+    @XmlElement(name = "tradedate")
+    @Column(name = "tradedate")
+    private LocalDate tradeDate;
+
+    @XmlElement(name = "numtrades")
+    @Column(name = "numtrades")
+    private int numTrades;
+
     private String open;
 }
