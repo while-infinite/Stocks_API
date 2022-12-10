@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.time.LocalDate;
 
 @Entity
@@ -12,12 +14,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "history")
+@XmlRootElement
 public class History {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @XmlElement(name = "secid")
     private Long secId;
     private LocalDate tradedate;
     private int numtrades;
-    private boolean open;
+    private String open;
 }
