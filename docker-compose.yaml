@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12.6
+    environment:
+      POSTGRES_DB: stocks
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5440:5432"
