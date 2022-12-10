@@ -1,6 +1,7 @@
 package ru.totsystems.stocks_api.convert;
 
 import org.springframework.web.multipart.MultipartFile;
+import ru.totsystems.stocks_api.exception.XMLConvertException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -18,7 +19,7 @@ public class XMLConverter {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             return className.cast(unmarshaller.unmarshal((File) file));
         } catch (JAXBException e) {
-            throw new RuntimeException();
+            throw new XMLConvertException("Failed convert XML to Object");
         }
     }
 
