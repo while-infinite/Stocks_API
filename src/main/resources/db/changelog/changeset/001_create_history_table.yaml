@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-history
+      author: Karen
+      changes:
+        - createTable:
+            tableName: history
+            columns:
+              - column:
+                  name: secid
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tradedate
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: numtrades
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: open
+                  type: boolean
+                  constraints:
+                    nullable: false
