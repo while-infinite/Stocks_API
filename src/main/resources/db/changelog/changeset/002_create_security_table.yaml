@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-security
+      author: Karen
+      changes:
+        - createTable:
+            tableName: security
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: secid
+                  type: int
+                  constraints:
+                    foreignKeyName: fk_security_history
+                    references: history (secid)
+                    nullable: true
+              - column:
+                  name: regnumber
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: element_title
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+

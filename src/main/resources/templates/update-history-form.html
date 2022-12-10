@@ -11,11 +11,11 @@
             <h2>Update history</h2>
             <hr/>
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
-            <form th:action="@{/updateHistory}" th:object="${historyDto}" th:method="put">
+            <form th:action="@{/history/updateHistory}" th:object="${historyDto}" th:method="put">
                 <input type="hidden" th:field="*{secId}">
-                <input type="text" th:field="*{tradedate}" placeholder="Enter tradedate"
+                <input type="text" th:field="*{tradeDate}" placeholder="Enter tradedate"
                        class="form-control col-4 mb-4">
-                <input type="text" th:field="*{numtrades}" placeholder="Enter numtrades"
+                <input type="text" th:field="*{numTrades}" placeholder="Enter numtrades"
                        class="form-control col-4 mb-4">
                 <input type="text" th:field="*{open}" placeholder="Enter (yes) if open, (no) if close"
                        class="form-control col-4 mb-4">
@@ -28,7 +28,7 @@
         <div class="col-md-10 mx-auto">
             <h2>Upload file for update</h2>
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
-            <form method="post" th:action="@{/upload}" th:object="${historyDto}">
+            <form method="post" th:action="@{/history/uploadHistory}" th:object="${historyDto}">
                 <div class="form-group">
                     <input type="file" th:field="*{file}" class="form-control-file">
                 </div>
@@ -40,7 +40,7 @@
 
 <hr/>
 <div class="col border-end  d-flex justify-content-center align-items-center">
-    <button type="button" th:href="@{/stock}" class="btn btn-primary float-center">Back to main page</button>
+    <button type="button" th:href="@{/security}" class="btn btn-primary float-center">Back to main page</button>
 </div>
 </body>
 </html>
