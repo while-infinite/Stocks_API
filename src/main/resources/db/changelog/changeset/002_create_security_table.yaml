@@ -15,7 +15,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: secid
-                  type: int
+                  type: varchar(50)
                   constraints:
                     foreignKeyName: fk_security_history
                     references: history (secid)
@@ -31,7 +31,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: element_title
+                  name: emitent_title
                   type: varchar(50)
                   constraints:
                     nullable: false

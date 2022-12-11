@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface SecurityRepository extends JpaRepository<Security, Long> {
-    @Query(value = "select s from Security s where s.history.getSecId() = ?1")
+    @Query(value = "from Security  where history.secId = ?1")
     Optional<Security> findBySecId(String secId);
 }

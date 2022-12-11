@@ -1,6 +1,7 @@
 package ru.totsystems.stocks_api.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +14,7 @@ import ru.totsystems.stocks_api.model.Security;
 import ru.totsystems.stocks_api.repository.HistoryRepository;
 import ru.totsystems.stocks_api.repository.SecurityRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class HistoryService {
@@ -22,13 +24,14 @@ public class HistoryService {
 
 
     @Transactional
-    public History addHistory(MultipartFile file, String secId) {
+    public History updateHistoryFromFile(MultipartFile file, String secId) {
         History history = XMLConverter.convertXMLtoObject(file, History.class);
-        Security security = securityRepository.findBySecId(secId)
-                .orElseThrow(() -> new NotFoundException("Security not found"));
-        security.setHistory(history);
-        securityRepository.save(security);
-        return history;
+        History retrievedHistory = historyRepository.findById(secId)
+                .orElseThrow(() -> new NotFoundException("History not found"));
+        history.setSecId(retrievedHistory.getSecId());
+        History savedHistory = historyRepository.save(history);
+        log.info("History wsa saved {}", savedHistory);
+        return savedHistory;
     }
 
     @Transactional(readOnly = true)
@@ -41,8 +44,22 @@ public class HistoryService {
         return historyRepository.save(history);
     }
 
+    public History save(History history){
+        return historyRepository.save(history);
+    }
+
+    @Transactional
     public void deleteHistory(String secId) {
+        Security security = securityRepository.findBySecId(secId).
+                orElseThrow(() -> new NotFoundException("Security not found"));
+        security.setHistory(null);
+        securityRepository.save(security);
         historyRepository.deleteById(secId);
+    }
+
+    public Boolean isPersist(String secId){
+        History history = historyRepository.findById(secId).orElse(null);
+        return history != null;
     }
 
 }

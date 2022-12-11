@@ -2,6 +2,7 @@ package ru.totsystems.stocks_api.controller;
 
 import com.google.common.io.Files;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -9,19 +10,24 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.totsystems.stocks_api.dto.HistoryDto;
+import ru.totsystems.stocks_api.mapper.HistoryMapper;
+import ru.totsystems.stocks_api.model.History;
 import ru.totsystems.stocks_api.service.HistoryService;
 
 import java.util.Objects;
 
+@Slf4j
 @Controller
 @RequestMapping("/history")
 @RequiredArgsConstructor
 public class HistoryController {
 
     private final HistoryService historyService;
+    private final HistoryMapper mapper;
 
     @PostMapping("/uploadHistory")
     public String addHistory(@ModelAttribute HistoryDto historyDto, RedirectAttributes attributes) {
+        log.info("historyDto = secId {}", historyDto.getSecId());
         MultipartFile file = historyDto.getFile();
         if (file == null || file.isEmpty()) {
             attributes.addFlashAttribute("message", "Please select a file to upload.");
@@ -36,7 +42,7 @@ public class HistoryController {
             return "redirect:/history";
         }
 
-        historyService.addHistory(historyDto.getFile(), historyDto.getSecId());
+        historyService.updateHistoryFromFile(historyDto.getFile(), historyDto.getSecId());
         attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
         return "redirect:/security";
     }
@@ -48,17 +54,26 @@ public class HistoryController {
         return "redirect:/security";
     }
 
-    @GetMapping("/updateForm")
+    @PutMapping("/updateForm")
     public ModelAndView getUpdateForm(@RequestParam String secId) {
         ModelAndView model = new ModelAndView("update-history-form");
-        HistoryDto historyDto = new HistoryDto(secId);
+        if(secId == null)
+            returnIfSecIdIsNull();
+        History history = historyService.getHistoryById(secId);
+        HistoryDto historyDto = mapper.historyToHistoryDto(history);
+        log.info("HistoryDto get secId {}", historyDto.getSecId());
         model.addObject("historyDto", historyDto);
         return model;
     }
 
-    @PostMapping("/deleteSecurity")
-    public String deleteSecurity(String secId) {
+    @DeleteMapping("/deleteHistory")
+    public String deleteHistory(@RequestParam String secId) {
         historyService.deleteHistory(secId);
+        return "redirect:/security";
+    }
+
+    @GetMapping("/security")
+    public String returnIfSecIdIsNull(){
         return "redirect:/security";
     }
 }
