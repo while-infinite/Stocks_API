@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Data
 public class HistoryDto {
     @NonNull
-    private Long secId;
+    private String secId;
     private LocalDate tradedate;
     private int numtrades;
     private String open;

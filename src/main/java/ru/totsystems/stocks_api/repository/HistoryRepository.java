@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.totsystems.stocks_api.model.History;
 
 @Repository
-public interface HistoryRepository extends JpaRepository<History, Long> {
+public interface HistoryRepository extends JpaRepository<History, String> {
 
 }

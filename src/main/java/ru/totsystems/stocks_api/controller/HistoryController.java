@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.totsystems.stocks_api.dto.HistoryDto;
-import ru.totsystems.stocks_api.mapper.HistoryMapper;
 import ru.totsystems.stocks_api.service.HistoryService;
 
 import java.util.Objects;
@@ -50,7 +49,7 @@ public class HistoryController {
     }
 
     @GetMapping("/updateForm")
-    public ModelAndView getUpdateForm(@RequestParam Long secId) {
+    public ModelAndView getUpdateForm(@RequestParam String secId) {
         ModelAndView model = new ModelAndView("update-history-form");
         HistoryDto historyDto = new HistoryDto(secId);
         model.addObject("historyDto", historyDto);
@@ -58,7 +57,7 @@ public class HistoryController {
     }
 
     @PostMapping("/deleteSecurity")
-    public String deleteSecurity(Long secId) {
+    public String deleteSecurity(String secId) {
         historyService.deleteHistory(secId);
         return "redirect:/security";
     }
