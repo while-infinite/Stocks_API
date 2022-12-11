@@ -1,14 +1,17 @@
 package ru.totsystems.stocks_api.validate;
 
 import com.google.common.io.Files;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.totsystems.stocks_api.dto.FilesDto;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+@Slf4j
 public class FileValidator {
 
     private FileValidator() {
@@ -18,28 +21,12 @@ public class FileValidator {
         Map<String, FilesDto> response = new HashMap<>();
         FilesDto filesDto = new FilesDto();
 
-        if (multipartFiles.length < 1) {
+        if (multipartFiles[0].isEmpty() && multipartFiles[1].isEmpty()) {
             response.put("Please select a file to upload.", null);
             return response;
         }
 
-        if (multipartFiles.length == 1) {
-            MultipartFile file = multipartFiles[0];
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            String extension = Files.getFileExtension(fileName);
-
-            if (!isProperExtension(extension)) {
-                response.put("Wrong file extension.", null);
-                return response;
-            }
-            if(fileName.matches("^(security)+"))
-                filesDto.setSecurityFile(file);
-            else
-                filesDto.setHistoryFile(file);
-        }
-
-
-        if (multipartFiles.length == 2) {
+        if (!multipartFiles[0].isEmpty() && !multipartFiles[1].isEmpty()) {
             MultipartFile securityFile = multipartFiles[0];
             MultipartFile historyFile = multipartFiles[1];
             String securityFileName = StringUtils.cleanPath(Objects.requireNonNull(securityFile.getOriginalFilename()));
@@ -47,27 +34,59 @@ public class FileValidator {
             String securityExtension = Files.getFileExtension(securityFileName);
             String historyExtension = Files.getFileExtension(historyFileName);
 
-            if (!isProperExtension(historyExtension)) {
-                response.put("Wrong file extension.", null);
-                return response;
-            }
-            else
-                filesDto.setSecurityFile(securityFile);
-
             if (!isProperExtension(securityExtension)) {
                 response.put("Wrong file extension.", null);
                 return response;
-            }
-            else
+            } else
+                filesDto.setSecurityFile(securityFile);
+
+            if (!isProperExtension(historyExtension)) {
+                response.put("Wrong file extension.", null);
+                return response;
+            } else
                 filesDto.setHistoryFile(historyFile);
+
+            if(filesDto.getHistoryFile() != null) {
+                log.info("History file not null");
+            if(filesDto.getSecurityFile() != null)
+                log.info("Security file not null");
+            }
         }
 
+        if (!multipartFiles[0].isEmpty() && multipartFiles[1].isEmpty()) {
+            return getResponse(multipartFiles[0], response, filesDto);
+        }
 
-        response.put("You successfully uploaded", filesDto);
+        if (!multipartFiles[1].isEmpty() && multipartFiles[0].isEmpty()) {
+            return getResponse(multipartFiles[1], response, filesDto);
+        }
+
+        response.put("You successfully uploaded!", filesDto);
         return response;
     }
 
-    private static boolean isProperExtension(String extension){
-        return "xml".equals(extension);
+    private static boolean isProperExtension(String extension) {
+        return "xml".equals(extension.toLowerCase(Locale.ROOT));
+    }
+
+    private static Map<String, FilesDto> getResponse(MultipartFile file, Map<String, FilesDto> response,
+                                                     FilesDto filesDto) {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        log.info("File name {}", fileName);
+        String extension = Files.getFileExtension(fileName);
+        log.info("File extention {}", extension);
+
+        if (!isProperExtension(extension)) {
+            response.put("Wrong file extension.", null);
+            return response;
+        }
+        if (fileName.matches("^[security].*"))
+            filesDto.setSecurityFile(file);
+        else
+            if (fileName.matches("^[history].*"))
+                filesDto.setHistoryFile(file);
+
+        response.put("You successfully uploaded!", filesDto);
+        return response;
     }
 }

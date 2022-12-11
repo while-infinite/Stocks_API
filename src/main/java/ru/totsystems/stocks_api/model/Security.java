@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,7 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "security")
-@XmlRootElement
+@XmlRootElement(name = "Security")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Security {
 
     @Id
@@ -30,8 +33,8 @@ public class Security {
 
     private String name;
 
-    @Column(name = "element_title")
-    @XmlElement(name = "element_title")
-    private String elementTitle;
+    @Column(name = "emitent_title")
+    @XmlElement(name = "emitent_title")
+    private String emitentTitle;
 
 }

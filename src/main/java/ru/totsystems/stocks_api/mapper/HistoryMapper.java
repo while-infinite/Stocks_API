@@ -7,4 +7,5 @@ import ru.totsystems.stocks_api.model.History;
 @Mapper(componentModel = "spring")
 public interface HistoryMapper {
     History historyDtoToHistory(HistoryDto historyDto);
+    HistoryDto historyToHistoryDto(History history);
 }

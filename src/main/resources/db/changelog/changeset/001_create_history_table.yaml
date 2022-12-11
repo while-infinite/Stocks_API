@@ -8,10 +8,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: secid
-                  type: int
-                  autoIncrement: true
+                  type: varchar(50)
                   constraints:
                     primaryKey: true
+                    unique: true
                     nullable: false
               - column:
                   name: tradedate
@@ -25,6 +25,6 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: open
-                  type: boolean
+                  type: varchar(50)
                   constraints:
                     nullable: false

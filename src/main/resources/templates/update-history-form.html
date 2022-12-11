@@ -28,16 +28,16 @@
         <div class="col-md-10 mx-auto">
             <h2>Upload file for update</h2>
             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
-            <form method="post" th:action="@{/history/uploadHistory}" th:object="${historyDto}">
+            <form method="post" th:action="@{/history/uploadHistory}" th:object="${historyDto}" enctype="multipart/form-data">
                 <div class="form-group">
                     <input type="file" th:field="*{file}" class="form-control-file">
+                    <input type="hidden" th:field="*{secId}">
                 </div>
                 <button type="submit" class="btn btn-primary">Upload File</button>
             </form>
         </div>
     </div>
 </div>
-
 <hr/>
 <div class="col border-end  d-flex justify-content-center align-items-center">
     <button type="button" th:href="@{/security}" class="btn btn-primary float-center">Back to main page</button>

@@ -9,5 +9,5 @@ public class SecurityDto {
     private String secId;
     private int regNumber;
     private String name;
-    private String elementTitle;
+    private String emitentTitle;
 }
