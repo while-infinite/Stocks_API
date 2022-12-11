@@ -6,7 +6,7 @@ import lombok.Data;
 public class SecurityDto {
 
     private long id;
-    private Long secId;
+    private String secId;
     private int regNumber;
     private String name;
     private String elementTitle;

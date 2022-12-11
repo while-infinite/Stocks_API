@@ -22,7 +22,7 @@ public class HistoryService {
 
 
     @Transactional
-    public History addHistory(MultipartFile file, Long secId) {
+    public History addHistory(MultipartFile file, String secId) {
         History history = XMLConverter.convertXMLtoObject(file, History.class);
         Security security = securityRepository.findBySecId(secId)
                 .orElseThrow(() -> new NotFoundException("Security not found"));
@@ -32,7 +32,7 @@ public class HistoryService {
     }
 
     @Transactional(readOnly = true)
-    public History getHistoryById(Long secId) {
+    public History getHistoryById(String secId) {
         return historyRepository.findById(secId).orElseThrow(() -> new NotFoundException("History not found"));
     }
 
@@ -41,7 +41,7 @@ public class HistoryService {
         return historyRepository.save(history);
     }
 
-    public void deleteHistory(Long secId) {
+    public void deleteHistory(String secId) {
         historyRepository.deleteById(secId);
     }
 

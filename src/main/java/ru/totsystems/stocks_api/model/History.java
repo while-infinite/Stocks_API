@@ -21,7 +21,7 @@ public class History {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlElement(name = "secid")
     @Column(name = "secid")
-    private Long secId;
+    private String secId;
 
     @XmlElement(name = "tradedate")
     @Column(name = "tradedate")
