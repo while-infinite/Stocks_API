@@ -23,6 +23,7 @@ public class FileValidator {
 
         if (multipartFiles[0].isEmpty() && multipartFiles[1].isEmpty()) {
             response.put("Please select a file to upload.", null);
+            log.info("There is no any file!");
             return response;
         }
 
@@ -36,21 +37,18 @@ public class FileValidator {
 
             if (!isProperExtension(securityExtension)) {
                 response.put("Wrong file extension.", null);
+                log.info("Wrong file extension");
                 return response;
             } else
                 filesDto.setSecurityFile(securityFile);
 
             if (!isProperExtension(historyExtension)) {
                 response.put("Wrong file extension.", null);
+                log.info("Wrong file extension");
                 return response;
             } else
                 filesDto.setHistoryFile(historyFile);
 
-            if(filesDto.getHistoryFile() != null) {
-                log.info("History file not null");
-            if(filesDto.getSecurityFile() != null)
-                log.info("Security file not null");
-            }
         }
 
         if (!multipartFiles[0].isEmpty() && multipartFiles[1].isEmpty()) {
@@ -62,6 +60,7 @@ public class FileValidator {
         }
 
         response.put("You successfully uploaded!", filesDto);
+        log.info("File(s) was/were uploaded");
         return response;
     }
 
@@ -74,10 +73,11 @@ public class FileValidator {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         log.info("File name {}", fileName);
         String extension = Files.getFileExtension(fileName);
-        log.info("File extention {}", extension);
+        log.info("File extension {}", extension);
 
         if (!isProperExtension(extension)) {
             response.put("Wrong file extension.", null);
+            log.info("Wrong file extension");
             return response;
         }
         if (fileName.matches("^[security].*"))
@@ -87,6 +87,7 @@ public class FileValidator {
                 filesDto.setHistoryFile(file);
 
         response.put("You successfully uploaded!", filesDto);
+        log.info("File was uploaded");
         return response;
     }
 }

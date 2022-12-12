@@ -39,8 +39,6 @@ public class SecurityController {
             return "redirect:/security";
         }
         FilesDto filesDto = validate.get("You successfully uploaded!");
-        log.info("FilesDto {}", filesDto);
-        log.info("Check key {}", validate.get("You successfully uploaded!"));
 
         securityService.addSecurityAndHistory(filesDto);
         attributes.addFlashAttribute("message", "You successfully uploaded!");
@@ -82,7 +80,6 @@ public class SecurityController {
 
     @DeleteMapping("/deleteSecurity")
     public String deleteSecurity(@RequestParam Long securityId) {
-        log.info("Security id {}", securityId);
         securityService.deleteSecurity(securityId);
         return "redirect:/security";
     }
