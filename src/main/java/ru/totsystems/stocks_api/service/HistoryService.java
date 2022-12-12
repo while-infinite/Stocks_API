@@ -36,12 +36,17 @@ public class HistoryService {
 
     @Transactional(readOnly = true)
     public History getHistoryById(String secId) {
-        return historyRepository.findById(secId).orElseThrow(() -> new NotFoundException("History not found"));
+        History retrievedHistory = historyRepository.findById(secId)
+                .orElseThrow(() -> new NotFoundException("History not found"));
+        log.info("History was given {}", retrievedHistory);
+        return retrievedHistory;
     }
 
     public History updateHistory(HistoryDto historyDto) {
         History history = mapper.historyDtoToHistory(historyDto);
-        return historyRepository.save(history);
+        History savedHistory = historyRepository.save(history);
+        log.info("History was saved {}", savedHistory);
+        return savedHistory;
     }
 
     public History save(History history){
@@ -53,8 +58,10 @@ public class HistoryService {
         Security security = securityRepository.findBySecId(secId).
                 orElseThrow(() -> new NotFoundException("Security not found"));
         security.setHistory(null);
-        securityRepository.save(security);
+        Security savedSecurity = securityRepository.save(security);
+        log.info("Security with null was saved {}", savedSecurity);
         historyRepository.deleteById(secId);
+        log.info("History was deleted");
     }
 
     public Boolean isPersist(String secId){

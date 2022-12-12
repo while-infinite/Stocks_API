@@ -42,8 +42,7 @@ public class SecurityService {
                     History savedHistory = historyService.save(history);
                     log.info("History was saved {}", savedHistory);
                     security.setHistory(savedHistory);
-                    log.info("Security  {}", security);
-                    log.info("History  {}", history);
+                    log.info("History was added to security {}", savedHistory);
                 }
             }
             Security savedSecurity = securityRepository.save(security);
@@ -62,9 +61,9 @@ public class SecurityService {
                 .bodyToMono(Security.class)
                 .block();
 
-        log.info("After web ckient");
         if (security != null) {
             security.setHistory(history);
+            log.info("History was added to security {}", history);
             Security savedSecurity = securityRepository.save(security);
             log.info("Security was saved {}", savedSecurity);
             return savedSecurity;
@@ -74,24 +73,34 @@ public class SecurityService {
 
     @Transactional(readOnly = true)
     public List<Security> getSecurityList() {
-        return securityRepository.findAll();
+        List<Security> securityList = securityRepository.findAll();
+        log.info("List of security was given");
+        return securityList;
     }
 
     @Transactional(readOnly = true)
     public Security getSecurity(Long id) {
-        return securityRepository.findById(id).orElseThrow(() -> new NotFoundException("Security not found"));
+        Security retrievedSecurity = securityRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Security not found"));
+        log.info("Security was given {}", retrievedSecurity);
+        return retrievedSecurity;
     }
 
     @Transactional
     public Security save(SecurityDto securityDto) {
         Security security = mapper.securityDtoToSecurity(securityDto);
         History history = historyService.getHistoryById(securityDto.getSecId());
+        log.info("History was retrieved {}", history);
         security.setHistory(history);
-        return securityRepository.save(security);
+        log.info("History was added to security");
+        Security savedSecurity = securityRepository.save(security);
+        log.info("Security was saved {}", savedSecurity);
+        return savedSecurity;
     }
 
     public void deleteSecurity(Long id) {
         securityRepository.deleteById(id);
+        log.info("Security was deleted");
     }
 
     public List<SecurityWithHistoryResponse> securityToResponse(List<Security> securityList) {

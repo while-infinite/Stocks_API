@@ -27,7 +27,6 @@ public class HistoryController {
 
     @PostMapping("/uploadHistory")
     public String addHistory(@ModelAttribute HistoryDto historyDto, RedirectAttributes attributes) {
-        log.info("historyDto = secId {}", historyDto.getSecId());
         MultipartFile file = historyDto.getFile();
         if (file == null || file.isEmpty()) {
             attributes.addFlashAttribute("message", "Please select a file to upload.");
@@ -61,7 +60,6 @@ public class HistoryController {
             returnIfSecIdIsNull();
         History history = historyService.getHistoryById(secId);
         HistoryDto historyDto = mapper.historyToHistoryDto(history);
-        log.info("HistoryDto get secId {}", historyDto.getSecId());
         model.addObject("historyDto", historyDto);
         return model;
     }

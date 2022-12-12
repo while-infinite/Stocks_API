@@ -37,11 +37,6 @@ public class XMLConverter {
             Path path = Path.of(XML_DIRECTORY_PATH + '/'
                     +(Objects.requireNonNull(multipart.getOriginalFilename())));
             File file = new File(path.toString());
-//            boolean isDelete = false;
-//            if (file.exists())
-//                isDelete = file.delete();
-//
-//            log.info("File is deleted = {}", isDelete);
             multipart.transferTo(new File(file.getAbsolutePath()));
             return Path.of(path.toString());
         } catch (IOException e) {
