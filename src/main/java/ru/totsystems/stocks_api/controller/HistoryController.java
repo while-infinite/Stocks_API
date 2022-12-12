@@ -56,8 +56,6 @@ public class HistoryController {
     @PutMapping("/updateForm")
     public ModelAndView getUpdateForm(@RequestParam String secId) {
         ModelAndView model = new ModelAndView("update-history-form");
-        if(secId == null)
-            returnIfSecIdIsNull();
         History history = historyService.getHistoryById(secId);
         HistoryDto historyDto = mapper.historyToHistoryDto(history);
         model.addObject("historyDto", historyDto);
@@ -70,8 +68,4 @@ public class HistoryController {
         return "redirect:/security";
     }
 
-    @GetMapping("/security")
-    public String returnIfSecIdIsNull(){
-        return "redirect:/security";
-    }
 }
